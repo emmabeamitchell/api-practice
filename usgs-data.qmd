@@ -1,0 +1,68 @@
+---
+title: "USGS-data"
+format: html
+editor: visual
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+library(tidyverse)
+library(dataRetrieval)
+
+
+```
+
+
+
+```{r}
+#set parameters for the query
+
+siteNumber <- "11118500"
+parameterCd <- "00060" # Discharge
+startDate <- "2023-08-19"
+endDate <- "2023-08-22"
+
+
+
+```
+
+```{r}
+#query the APIs
+
+
+discharge <- readNWISuv(siteNumber, parameterCd, startDate, endDate) |>
+  rename(discharge = X_00060_00000)
+
+
+```
+
+
+```{r}
+
+ggplot(discharge, aes( x = dateTime, y = discharge)) +
+  geom_point() + 
+  labs(
+    x = "Date",
+    y = "discharge",
+    title = "Discharge over Three Days"
+  )
+
+
+```
+
+```{r}
+
+siteNumber <- "11118500"
+parameterCd <- "00060" # Discharge
+startDate <- "2023-08-19"
+endDate <- "2023-08-22"
+statCd <- c("00001", "00003")
+
+max_discharge <- readNWISuv(siteNumber, parameterCd,
+  startDate, endDate,
+  statCd = statCd
+)
+
+```
+
